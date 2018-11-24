@@ -1,4 +1,4 @@
-.data
+	.data
 	# declaraçao de um vetor de 3 posiçoes char
 	vet: .byte '1', '|','2', '|', '3', '\n', '-', '+','-', '+', '-', '\n', '4', '|','5', '|', '6', '\n', '-', '+','-', '+', '-', '\n', '7', '|','8', '|', '9', '\n'
 	msg1:   .asciiz "\nDigite uma posicao (int): "
@@ -20,10 +20,10 @@ main:
 	X = 3
 	O = 5
 	li $t7, 0
+	li $t9, 0 			# t9 é o contador (i)
 
 COMECO:	
 	li $t8, 0
-	li $t9, 0 			# t9 é o contador (i)
 	la $t1, vet		#carrega o endereço
 
 	# $t7 = TESTE SE É A VEZ DO X OU DO O
@@ -98,7 +98,8 @@ CHECAR_VETOR_CHAR:
 	beq $t2, 9, NONO # t2 = valor digitado
 
 PRIMEIRO:
-	bnez 0($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 0($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO1
 	#MUDA O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -111,7 +112,8 @@ PRIMEIRO:
 		j COMECO
 
 SEGUNDO:
-	bnez 2($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 2($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO2
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -124,7 +126,8 @@ SEGUNDO:
 		j COMECO
 
 TERCEIRO:
-	bnez 4($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 4($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO3
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -137,7 +140,8 @@ TERCEIRO:
 		j COMECO
 
 QUARTO:
-	bnez 12($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 12($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO4
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -150,7 +154,8 @@ QUARTO:
 		j COMECO
 
 QUINTO:
-	bnez 14($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 14($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO5
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -163,7 +168,8 @@ QUINTO:
 		j COMECO
 
 SEXTO:
-	bnez 16($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 16($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO6
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -176,7 +182,8 @@ SEXTO:
 		j COMECO
 
 SETIMO:
-	bnez 24($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 24($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO7
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -189,7 +196,8 @@ SETIMO:
 		j COMECO
 
 OITAVO:
-	bnez 26($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 26($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO8
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
@@ -202,7 +210,8 @@ OITAVO:
 		j COMECO
 
 NONO:
-	bnez 28($t1), ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
+	lw $s4, 28($t1) #ADICIONAR O VALOR DO VETOR $t1[0] no reg s4
+	bnez $s4, ERRO_OCUPADO #TESTA SE A POSICAO ESTA OCUPADA
 	beq $t7, 0, ADDO9
 	#MUDAR O VALOR DO X
 		li $s4, 'x' # carrega o char 'x' no registrador s4
