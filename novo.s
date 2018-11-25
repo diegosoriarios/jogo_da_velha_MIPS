@@ -6,7 +6,7 @@
 	fim: .asciiz "Fim de Jogo."
 	XGanha: .asciiz "X Ganhou"
 	OGanha: .asciiz "O Ganhou"
-	ocupado: .asciiz "Posição ocupada"
+	ocupado: .asciiz "Posição ocupada.\nDigite outro valor (int): "
 	debug: .asciiz "AQUI"
 	.text
 .globl main
@@ -44,7 +44,7 @@ ROTA:
 	rem $t7, $t7, 2 # t7 = t7 % 2, retorna 0 ou 1
 	beq $t8, 1, PLAYER
 
-PLAYER:
+PLAYER: #PEDE PRA O PLAYER DIGITAR A POSICAO
 	li $t9, 0
 	#ESCREVER POSICAO
 	li $v0, 4   
@@ -67,12 +67,10 @@ ERRO_OCUPADO:
 	li $v0, 4   
 	la $a0, ocupado
 	syscall
-	j END
+	j PLAYER
 	
 ESCREVER_VETOR_INTEIRO:
 	addi $t3, $t3, 1 # incrementando contador t3
-	lw $s4, ($t1) #ADICIONAR O VALOR DO VETOR $t1 no reg s4
-	bnez $s4, ERRO_OCUPADO
 	addi $t1,$t1, 4 # incrementando endereço vetor
 	bne $t2, $t3 ESCREVER_VETOR_INTEIRO #t2 = valor digitado, t3 = contador
 	lw $s3, ($t1) #carregando endereço do vetor pra reg s3
