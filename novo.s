@@ -2,8 +2,8 @@
 	# declaraçao de um vetor de 3 posiçoes char
 	vet: .byte '1', '|','2', '|', '3', 10, '-', '+','-', '+', '-', 10, '4', '|','5', '|', '6', 10, '-', '+','-', '+', '-', 10, '7', '|','8', '|', '9', 10
 	msg1:   .asciiz "\nDigite uma posicao (int): "
-	matrix: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 #tem 10 posições porque com 9 bugava
-	fim: .asciiz "Fim de Jogo."
+	matrix: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 #tem 10 posições porque 0 não é usado
+	empate: .asciiz "Jogo empatado."
 	XGanha: .asciiz "X Ganhou"
 	OGanha: .asciiz "O Ganhou"
 	ocupado: .asciiz "Posição ocupada.\nDigite outro valor (int): "
@@ -81,19 +81,22 @@ ERRO_OCUPADO:
 	
 ESCREVER_VETOR_INTEIRO:
 	addi $t3, $t3, 1 # incrementando contador t3
+	beq $t2, $t3 CARREGA_VETOR_INTEIRO #t2 = valor digitado, t3 = contador
 	addi $t1,$t1, 4 # incrementando endereço vetor
 	bne $t2, $t3 ESCREVER_VETOR_INTEIRO #t2 = valor digitado, t3 = contador
-	lw $s3, ($t1) #carregando endereço do vetor pra reg s3
-	bnez $s3, ERRO_OCUPADO #check se a posição está ocupada
-	bnez $t7, ADDX
 
-	ADDX:
-		addi $s3, $s3, X #adiciona no valor
-		sw $s3, ($t1) #salvar reg s3 no vetor t1
-		j CHECAR_VETOR_CHAR
+	CARREGA_VETOR_INTEIRO:
+		lw $s3, ($t1) #carregando endereço do vetor pra reg s3
+		bnez $s3, ERRO_OCUPADO #check se a posição está ocupada
+		bnez $t7, ADDX
 
 	ADDO:
 		addi $s3, $s3, O #adiciona no valor
+		sw $s3, ($t1) #salvar reg s3 no vetor t1
+		j CHECAR_VETOR_CHAR
+
+	ADDX:
+		addi $s3, $s3, X #adiciona no valor
 		sw $s3, ($t1) #salvar reg s3 no vetor t1
 		j CHECAR_VETOR_CHAR
 
@@ -226,7 +229,7 @@ VERIFICA_VENCEDOR:
 	la $t1, matrix
 	#Checa as linhas
 	#Linha 1
-	lw $s5, ($t1)
+	lw $s5, 0($t1)
 	lw $s6, 4($t1)
 	lw $s7, 8($t1)
 	add $s6, $s6, $s5
@@ -250,7 +253,7 @@ VERIFICA_VENCEDOR:
 	beq $s7, 15, O_GANHOU
 	beq $s7, 9, X_GANHOU
 	#Coluna 1
-	lw $s5, ($t1)
+	lw $s5, 0($t1)
 	lw $s6, 12($t1)
 	lw $s7, 24($t1)
 	add $s6, $s6, $s5
@@ -274,7 +277,7 @@ VERIFICA_VENCEDOR:
 	beq $s7, 15, O_GANHOU
 	beq $s7, 9, X_GANHOU
 	#Diagonal 1
-	lw $s5, ($t1)
+	lw $s5, 0($t1)
 	lw $s6, 16($t1)
 	lw $s7, 32($t1)
 	add $s6, $s6, $s5
@@ -290,7 +293,7 @@ VERIFICA_VENCEDOR:
 	beq $s7, 15, O_GANHOU
 	beq $s7, 9, X_GANHOU
 	#Verifica empate
-	lw $s5, ($t1)
+	lw $s5, 0($t1)
 	lw $s6, 4($t1)
 	add $s6, $s6, $s5
 	lw $s5, 8($t1)
@@ -312,25 +315,58 @@ VERIFICA_VENCEDOR:
 	j COMECO #se ninguem ganhou
 
 O_GANHOU:
-	li $v0, 4   
-	la $a0, OGanha
-	syscall
-	li $v0, 10 		# terminate program
-	syscall
+	la $t1, vet		#carrega o endereço
+	O_DESENHA:
+		beq $t9, CONST, O_FIM 	# testa a condiçao
+		lb $a0, ($t1) 			# carrega o char da memoria
+		li $v0, PRINT_CHAR		# char deve estar em $a0
+		syscall
+		addi $t9, $t9, 1	# incremento do i  
+		addi $t1,$t1, 1		# incrementa o endereço
+		j O_DESENHA
+
+	O_FIM:
+		li $v0, 4   
+		la $a0, OGanha
+		syscall
+		li $v0, 10 		# terminate program
+		syscall
 
 X_GANHOU:
-	li $v0, 4   
-	la $a0, XGanha
-	syscall
-	li $v0, 10 		# terminate program
-	syscall
+	la $t1, vet		#carrega o endereço
+	X_DESENHA:
+		beq $t9, CONST, X_FIM 	# testa a condiçao
+		lb $a0, ($t1) 			# carrega o char da memoria
+		li $v0, PRINT_CHAR		# char deve estar em $a0
+		syscall
+		addi $t9, $t9, 1	# incremento do i  
+		addi $t1,$t1, 1		# incrementa o endereço
+		j X_DESENHA
+
+	X_FIM:
+		li $v0, 4   
+		la $a0, XGanha
+		syscall
+		li $v0, 10 		# terminate program
+		syscall
 
 END:
-	li $v0, 4   
-	la $a0, fim
-	syscall
-	li $v0, 10 		# terminate program
-	syscall
+	la $t1, vet		#carrega o endereço
+	END_DESENHA:
+		beq $t9, CONST, FIM 	# testa a condiçao
+		lb $a0, ($t1) 			# carrega o char da memoria
+		li $v0, PRINT_CHAR		# char deve estar em $a0
+		syscall
+		addi $t9, $t9, 1	# incremento do i  
+		addi $t1,$t1, 1		# incrementa o endereço
+		j END_DESENHA
+
+	FIM:
+		li $v0, 4   
+		la $a0, empate
+		syscall
+		li $v0, 10 		# terminate program
+		syscall
 
 ##DEBUGER
 #li $v0, 4   
