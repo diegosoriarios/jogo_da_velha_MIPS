@@ -1,3 +1,7 @@
+#
+## Trabalho feito para disciplina de Arquitetura de Computadores 1
+## Autores: Diego Soria Rios e Paulo Cesar Martins Citron
+#
 .data
 	# declaraçao de um vetor de 3 posiçoes char
 	vet: .byte '1', '|','2', '|', '3', 10, '-', '+','-', '+', '-', 10, '4', '|','5', '|', '6', 10, '-', '+','-', '+', '-', 10, '7', '|','8', '|', '9', 10
