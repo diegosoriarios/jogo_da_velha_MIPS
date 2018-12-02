@@ -113,6 +113,11 @@ COMECO:
 
 	# $t7 = TESTE SE É A VEZ DO X OU DO O
 
+LIMPA_TELA:
+	li $v0, 4   
+	la $a0, limpaTela
+	syscall
+
 DESENHA:
 	beq $t9, CONST, ROTA 	# testa a condiçao
 	lb $a0, ($t1) 			# carrega o char da memoria
@@ -407,10 +412,6 @@ VERIFICA_VENCEDOR:
 	#lw $s5, 32($t1)
 	#add $s6, $s6, $s5
 	#beq $s6, 32, END 
-
-	li $v0, 4   
-	la $a0, limpaTela
-	syscall
 
 	j COMECO #se ninguem ganhou
 
