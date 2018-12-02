@@ -1,5 +1,5 @@
 #
-## Trabalho feito para disciplina de Arquitetura de Computadores 1
+## Trabalho feito para disciplina de Arquitetura de Computadores 2
 ## Autores: Diego Soria Rios e Paulo Cesar Martins Citron
 #
 .data
