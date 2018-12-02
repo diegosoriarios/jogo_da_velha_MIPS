@@ -884,7 +884,7 @@ O_SEGUNDA_COLUNA:
 	COLUNA23:
 		addi $s5, $s5, O #adiciona no valor
 		sw $s5, 28($t1) #salvar reg s3 no vetor t1
-		li $s6, 7
+		li $s6, 8
 		j CHECAR_VETOR_CHAR
 
 O_TERCEIRA_COLUNA:
